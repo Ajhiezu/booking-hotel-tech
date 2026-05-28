@@ -7,11 +7,14 @@ use App\Http\Requests\Owner\HotelRequest;
 use App\Models\Facility;
 use App\Models\Hotel;
 use App\Models\HotelImage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class HotelController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         $hotels = auth()->user()->hotels()->with(['rooms', 'bookings'])->latest()->paginate(10);
@@ -65,7 +68,7 @@ class HotelController extends Controller
     {
         $this->authorize('update', $hotel);
         $facilities    = Facility::orderBy('category')->orderBy('name')->get();
-        $selectedFacilities = $hotel->facilities()->pluck('id')->toArray();
+        $selectedFacilities = $hotel->facilities()->pluck('facilities.id')->toArray();
         return view('owner.hotels.edit', compact('hotel', 'facilities', 'selectedFacilities'));
     }
 
@@ -97,7 +100,7 @@ class HotelController extends Controller
             }
         }
 
-        return redirect()->route('owner.hotels.edit', $hotel)
+        return redirect()->route('owner.hotels.index')
             ->with('success', 'Hotel updated successfully.');
     }
 

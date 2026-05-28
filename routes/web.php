@@ -127,6 +127,17 @@ Route::middleware('auth')->get('/dashboard', function () {
 
 // ─── Global Authenticated Routes ──────────────────────────────────────────
 Route::middleware('auth')->group(function () {
+    Route::get('/notifications', function () {
+        $notifications = auth()->user()->notifications()->paginate(20);
+        return view('notifications.index', compact('notifications'));
+    })->name('notifications.index');
+
+    Route::get('/notifications/{id}/read', function ($id) {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return redirect($notification->data['action'] ?? url('/'));
+    })->name('notifications.read');
+
     Route::post('/notifications/mark-all-read', function () {
         auth()->user()->unreadNotifications->markAsRead();
         return back();

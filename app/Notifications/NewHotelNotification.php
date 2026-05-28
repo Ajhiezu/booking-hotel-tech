@@ -25,7 +25,7 @@ class NewHotelNotification extends Notification
             'type'    => 'new_hotel',
             'title'   => 'New Hotel Submitted',
             'message' => "{$this->hotel->owner->name} has submitted a new hotel '{$this->hotel->name}' for approval.",
-            'action'  => route('admin.hotels.show', $this->hotel->id),
+            'action'  => route('admin.hotels.show', $this->hotel),
             'icon'    => 'office-building',
         ];
     }

@@ -21,24 +21,29 @@
          class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 overflow-hidden" 
          style="display: none;">
         
-        <div class="px-4 py-2 border-b border-gray-50 flex items-center justify-between">
-            <h3 class="font-bold text-gray-900 text-sm">Notifications</h3>
+        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <h3 class="font-semibold text-gray-900">Notifications</h3>
             @if(auth()->user()->unreadNotifications->count() > 0)
                 <form action="{{ route('notifications.mark-all-read') }}" method="POST">
                     @csrf
-                    <button type="submit" class="text-[11px] text-blue-600 hover:text-blue-700 font-semibold uppercase tracking-wider">Mark all as read</button>
+                    <button type="submit" class="text-xs text-blue-600 hover:text-blue-700 font-medium hover:underline transition-all">Mark all read</button>
                 </form>
             @endif
         </div>
 
-        <div class="max-h-[350px] overflow-y-auto">
+        <div class="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
             @forelse(auth()->user()->notifications->take(10) as $notification)
-                <a href="{{ $notification->data['action'] ?? '#' }}" 
-                   class="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 {{ $notification->read_at ? 'opacity-60' : '' }}">
-                    <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center {{ $notification->read_at ? 'bg-gray-100' : 'bg-blue-50' }}">
+                <a href="{{ route('notifications.read', $notification->id) }}" 
+                   class="group relative flex gap-4 p-4 transition-all border-b border-gray-50 last:border-0 {{ $notification->read_at ? 'bg-white hover:bg-gray-50' : 'bg-blue-50/30 hover:bg-blue-50/50' }}">
+                   
+                    @if(!$notification->read_at)
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-full bg-blue-500 rounded-r"></div>
+                    @endif
+
+                    <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center {{ $notification->read_at ? 'bg-gray-100' : 'bg-blue-100 ring-4 ring-white' }}">
                         @php
                             $icon = $notification->data['icon'] ?? 'bell';
-                            $iconColor = $notification->read_at ? 'text-gray-400' : 'text-blue-600';
+                            $iconColor = $notification->read_at ? 'text-gray-500' : 'text-blue-600';
                         @endphp
                         @if($icon === 'user-plus')
                             <svg class="w-5 h-5 {{ $iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
@@ -52,10 +57,13 @@
                             <svg class="w-5 h-5 {{ $iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                         @endif
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[13px] font-bold text-gray-900 leading-snug">{{ $notification->data['title'] }}</p>
-                        <p class="text-xs text-gray-500 mt-0.5 line-clamp-2 leading-relaxed">{{ $notification->data['message'] }}</p>
-                        <p class="text-[10px] text-gray-400 mt-1 uppercase font-semibold letter-spacing-wide">{{ $notification->created_at->diffForHumans() }}</p>
+                    <div class="flex-1 min-w-0 pt-0.5">
+                        <p class="text-sm font-medium {{ $notification->read_at ? 'text-gray-700' : 'text-gray-900' }} truncate">{{ $notification->data['title'] }}</p>
+                        <p class="text-xs {{ $notification->read_at ? 'text-gray-500' : 'text-gray-600' }} mt-1 line-clamp-2 leading-relaxed">{{ $notification->data['message'] }}</p>
+                        <div class="flex items-center gap-1.5 mt-2 text-xs text-gray-400 font-medium">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            {{ $notification->created_at->diffForHumans() }}
+                        </div>
                     </div>
                 </a>
             @empty
@@ -67,5 +75,11 @@
                 </div>
             @endforelse
         </div>
+        
+        @if(auth()->user()->notifications->count() > 0)
+        <div class="p-3 border-t border-gray-100 bg-gray-50/50 text-center">
+            <a href="{{ route('notifications.index') }}" class="text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline">View all notifications</a>
+        </div>
+        @endif
     </div>
 </div>

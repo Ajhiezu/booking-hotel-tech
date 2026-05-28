@@ -48,7 +48,7 @@ class RoomController extends Controller
     {
         $hotel = $this->getOwnerHotel($hotel);
         abort_if($room->hotel_id !== $hotel->id, 403);
-        return view('owner.rooms.edit', compact('hotel', 'room'));
+        return view('owner.rooms.create', compact('hotel', 'room'));
     }
 
     public function update(RoomRequest $request, Hotel $hotel, Room $room)
