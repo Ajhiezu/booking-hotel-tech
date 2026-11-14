@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if (config('demo.enabled')) {
             config([
-                'session.driver' => 'file',
+                'session.driver' => 'cookie',
                 'cache.default' => 'array',
                 'queue.default' => 'sync',
                 'mail.default' => 'log',
