@@ -11,7 +11,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (config('demo.enabled')) {
+            config([
+                'session.driver' => 'file',
+                'cache.default' => 'array',
+                'queue.default' => 'sync',
+                'mail.default' => 'log',
+            ]);
+        }
     }
 
     /**

@@ -88,6 +88,7 @@
 
         {{-- Page content --}}
         <main class="flex-1 overflow-y-auto p-6">
+            @include('partials.demo-banner')
             @yield('content')
         </main>
     </div>

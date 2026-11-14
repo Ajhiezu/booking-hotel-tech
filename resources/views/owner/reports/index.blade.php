@@ -26,7 +26,7 @@
             <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Hotel</label>
                 <select name="hotel_id" required class="w-full border-gray-200 rounded-xl focus:ring-blue-500 text-sm py-2">
-                    @foreach(auth()->user()->hotels()->approved()->get() as $h)
+                    @foreach(auth()->user()->relationLoaded('hotels') ? auth()->user()->hotels->where('status', 'approved') : auth()->user()->hotels()->approved()->get() as $h)
                         <option value="{{ $h->id }}" {{ old('hotel_id') == $h->id ? 'selected' : '' }}>{{ $h->name }}</option>
                     @endforeach
                 </select>

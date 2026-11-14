@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Booking;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -13,7 +14,7 @@ class BookingsExport implements FromQuery, WithHeadings, WithMapping, WithStyles
 {
     public function __construct(protected string $from, protected string $to) {}
 
-    public function query()
+    public function query(): Builder
     {
         return Booking::with(['user', 'hotel', 'room'])
             ->whereDate('created_at', '>=', $this->from)

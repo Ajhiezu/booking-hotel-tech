@@ -53,7 +53,7 @@
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-3">Facilities</label>
                 <div class="grid grid-cols-3 gap-3">
-                    @foreach(\App\Models\Facility::all() as $facility)
+                    @foreach($facilities as $facility)
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" name="facilities[]" value="{{ $facility->id }}" class="rounded text-blue-600"
                                 {{ (is_array(old('facilities')) && in_array($facility->id, old('facilities'))) || (isset($hotel) && $hotel->facilities->contains($facility->id)) ? 'checked' : '' }}>

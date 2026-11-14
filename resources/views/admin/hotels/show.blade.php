@@ -103,7 +103,7 @@
                 </div>
                 <div class="flex justify-between">
                     <span class="text-sm text-gray-500">Total Bookings</span>
-                    <span class="font-semibold">{{ $hotel->bookings()->count() }}</span>
+                    <span class="font-semibold">{{ $hotel->relationLoaded('bookings') ? $hotel->bookings->count() : $hotel->bookings()->count() }}</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-sm text-gray-500">Average Rating</span>

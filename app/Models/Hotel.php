@@ -119,6 +119,9 @@ class Hotel extends Model
     public function isWishlistedByUser(?int $userId): bool
     {
         if (!$userId) return false;
+        if ($this->relationLoaded('wishlists')) {
+            return $this->wishlists->contains('user_id', $userId);
+        }
         return $this->wishlists()->where('user_id', $userId)->exists();
     }
 

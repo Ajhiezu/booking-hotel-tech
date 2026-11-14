@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/demo/{role}', fn () => abort(404))->name('demo.role');
+
 // ─── Public / Customer Routes ─────────────────────────────────────────────
 Route::get('/', [\App\Http\Controllers\Customer\HomeController::class, 'index'])->name('home');
 Route::get('/hotels/search', [\App\Http\Controllers\Customer\SearchController::class, 'index'])->name('hotels.search');

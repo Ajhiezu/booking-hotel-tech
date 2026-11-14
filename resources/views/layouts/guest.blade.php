@@ -19,6 +19,7 @@
     </style>
 </head>
 <body class="font-sans text-gray-900 antialiased selection:bg-blue-500 selection:text-white">
+    @include('partials.demo-banner')
     <div class="min-h-screen relative flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8 bg-gray-50">
         
         <!-- Decoration Background -->

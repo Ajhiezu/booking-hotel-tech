@@ -97,6 +97,7 @@
 
     {{-- Main Content --}}
     <main>
+        @include('partials.demo-banner')
         @yield('content')
     </main>
 

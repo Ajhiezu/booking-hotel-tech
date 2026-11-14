@@ -7,6 +7,51 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Demo tanpa database
+
+Mode demo mencakup halaman customer, hotel owner, dan admin dengan data contoh.
+Tidak perlu menjalankan migrasi atau menyalakan MySQL/SQLite. Form hanya
+menampilkan simulasi; perubahan, reservasi, pembayaran, dan unggahan tidak disimpan.
+Ekspor laporan menampilkan halaman pratinjau, bukan mengunduh file.
+
+```powershell
+composer install
+# Jalankan jika .env belum ada:
+Copy-Item .env.example .env
+php artisan key:generate
+npm.cmd ci
+npm.cmd run build
+php artisan serve
+```
+
+Pastikan `.env` berisi `DEMO_MODE=true`, lalu buka `http://127.0.0.1:8000`.
+Gunakan pilihan **Customer**, **Hotel Owner**, dan **Admin** di banner demo;
+tidak diperlukan akun atau kata sandi. Halaman dashboard juga bisa dibuka di
+`/owner/dashboard` dan `/admin/dashboard`.
+
+Mode demo otomatis menggunakan sesi file, cache memori, dan antrean sinkron,
+sehingga konfigurasi driver database tidak dipakai untuk demo. Data contoh
+diatur di `app/Demo/DemoData.php`.
+
+Untuk kembali ke aplikasi dengan data asli, ubah `DEMO_MODE=false`, atur koneksi
+database beserta driver sesi/cache/antrean di `.env`, lalu jalankan:
+
+```powershell
+php artisan config:clear
+php artisan migrate
+```
+
+Mode demo memberikan akses pratinjau seluruh peran; nonaktifkan sebelum memakai
+aplikasi dengan data asli. Hindari `composer run setup` untuk demo karena skrip
+tersebut menjalankan migrasi. Perintah `npm.cmd` dipakai agar tetap berjalan di
+PowerShell yang membatasi eksekusi `npm.ps1`.
+
+Verifikasi demo tanpa akses database:
+
+```powershell
+php vendor/phpunit/phpunit/phpunit tests/Feature/DemoModeTest.php
+```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
